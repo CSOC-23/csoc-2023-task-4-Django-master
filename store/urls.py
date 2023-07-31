@@ -1,11 +1,14 @@
 from django.urls import path
-from store.views import *
+from . import views
+
+# app_name = 'store'
 
 urlpatterns = [
-    path('', index, name="index"),
-    path('books/', bookListView, name="book-list"),
-    path('book/<int:bid>/', bookDetailView, name='book-detail' ),
-    path('books/loaned/', viewLoanedBooks, name="view-loaned"),
-    path('books/loan/', loanBookView, name="loan-book"),
-    path('books/return/', returnBookView, name="return-book"),
+    path('', views.index, name="index"),
+    path('books/', views.bookListView, name="book-list"),
+    path('book/<int:bid>/', views.bookDetailView, name='book-detail' ),
+    path('books/loaned/', views.viewLoanedBooks, name="view-loaned"),
+    path('books/loan/', views.loanBookView, name="loan-book"),
+    path('books/return/', views.returnBookView, name="return-book"),
+    path('book/<int:bid>/rate/', views.rateBookView, name='rate-book'),
 ]

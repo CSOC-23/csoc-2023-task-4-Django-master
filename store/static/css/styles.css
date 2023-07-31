@@ -1,0 +1,42 @@
+/* Custom styles for base.html */
+.sidebar {
+    background-color: #f8f9fa;
+    padding: 20px;
+    height: 100vh;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+/* Custom styles for book_detail.html */
+.book-details {
+    padding: 20px;
+}
+
+/* Custom styles for book_list.html */
+.search-row {
+    margin-bottom: 20px;
+}
+
+.search-button {
+    margin-top: 32px;
+}
+
+.book-table {
+    margin-top: 20px;
+}
+
+/* Custom styles for index.html */
+.welcome-text {
+    margin-top: 20px;
+}
+
+/* Custom styles for loaned_books.html */
+.loaned-books-table {
+    margin-top: 20px;
+}
+
+.return-button {
+    margin: 5px;
+}

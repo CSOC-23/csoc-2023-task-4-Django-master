@@ -5,23 +5,49 @@
 {% endblock %}
 
 {% block content %}
-<h2>Title: {{ book.title }}</h2>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4">Title: {{ book.title }}</h2>
+            <dl class="row">
+                <dt class="col-sm-3">Genre:</dt>
+                <dd class="col-sm-9">{{ book.genre }}</dd>
+                <dt class="col-sm-3">Author:</dt>
+                <dd class="col-sm-9">{{ book.author }}</dd>
+                <dt class="col-sm-3">Description:</dt>
+                <dd class="col-sm-9">{{ book.description }}</dd>
+                <dt class="col-sm-3">MRP:</dt>
+                <dd class="col-sm-9">Rs. {{ book.mrp }}</dd>
+                <dt class="col-sm-3">Available Copies:</dt>
+                <dd class="col-sm-9">{{ num_available }}</dd>
 
-<dl>
-    <dt>Genre:</dt>
-    <dd>{{ book.genre }}</dd>
-    <dt>Author:</dt>
-    <dd>{{ book.author }}</dd>
-    <dt>Description:</dt>
-    <dd>{{ book.description }}</dd>
-    <dt>Rating:</dt>
-    <dd>{{ book.rating }}</dd>
-    <dt>MRP:</dt>
-    <dd>Rs. {{ book.mrp }}</dd>
-    <dt>Available Copies:</dt>
-    <dd>{{ num_available }}</dd>
-</dl>
-<button class="btn btn-primary" id="loan-button">Loan {{ book.title }}</button>
+                <!--Ratings-->
+                <dt class="col-sm-3 mt-4">Average Rating:</dt>
+                <dd class="col-sm-9 mt-4">{{ average_rating }}</dd>
+                <dt class="col-sm-3">Your Rating:</dt>
+                <dd class="col-sm-9">
+                    {% if user.is_authenticated %}
+                    {% if user_rating %}{{ user_rating }}{% else %}Not Rated{% endif %}
+                    {% endif %}
+                </dd>
+
+            </dl>
+            <button class="btn btn-primary" id="loan-button">Loan {{ book.title }}</button>
+
+            <!-- Rating Form -->
+            {% if user.is_authenticated %}
+            <div class="mt-5">
+              <form id="rating-form">
+                <label for="rating">Your Rating (0-10): </label>
+                <input type="number" name="rating" id="rating" min="0" max="10" step="1">
+                <button type="submit">Submit</button>
+              </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 <script>
 $("#loan-button").click(function(){
     $.ajax({
@@ -31,6 +57,7 @@ $("#loan-button").click(function(){
 			bid: {{ book.id }}
 		},
 		success: function(data, status, xhr){
+		    console.log(data)
 			if(data['message'] == "success"){
                 alert("Book successfully issued");
                 window.location.replace("/books/loaned");
@@ -45,5 +72,37 @@ $("#loan-button").click(function(){
 
 	})
 })
+
+
+$("#rating-form").submit(function(e) {
+    e.preventDefault();
+
+    var rating = $("#rating").val();
+    if (rating < 0 || rating > 10) {
+        alert("Invalid rating. Please enter a number between 0 and 10.");
+        return;
+    }
+
+    $.ajax({
+        url: "{% url 'rate-book' book.id %}",
+        method: "POST",
+        data: {
+            rating: rating
+        },
+        success: function(data, status, xhr) {
+            if (data.message === 'success') {
+                alert('Rating submitted successfully!');
+                location.reload();
+            } else if (data.message === 'failure') {
+                alert('Failed to submit the rating.');
+            } else {
+                alert('An error occurred while processing the request.');
+            }
+        },
+        error: function(xhr, status, err) {
+            alert("Some error occurred");
+        }
+    });
+});
 </script>
 {% endblock %}
