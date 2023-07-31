@@ -9,7 +9,7 @@
 {% block content %}
 
 <h3>Books list</h3>
-<div class="row">
+<div class="row py-3">
     <div class="col-sm-3">
         Title: <input type="text" name="title" id="title">
     </div>
@@ -19,11 +19,12 @@
     <div class="col-sm-3">
         Genre: <input type="text" name="genre" id="genre">
     </div>
+    <div class="col-sm-3">
+        <button id="search_button" class="btn btn-primary">Search</button>
+    </div>
 </div>
-<div class="row">
-    <button id="search_button" class="btn btn-primary">Search</button>
-</div>
-<table class="table">
+
+<table class="table mt-4">
     <thead>
         <tr>
         <th scope="col">#</th>
@@ -41,7 +42,7 @@
         <td><a href="/book/{{ book.id }}/">{{ book.title }}</a></td>
         <td>{{ book.author }}</td>
         <td>{{ book.genre }}</td>
-        <td>{{ book.rating }}</td>
+        <td>{{ book.average_rating }}</td>
         <td>{{ book.mrp }}</td>
         </tr>
         {% endfor %}
